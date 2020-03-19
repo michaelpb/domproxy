@@ -1,0 +1,25 @@
+*.pyc
+*~
+.idea/
+docs/build
+*.orig
+*.rej
+*.pyc
+*.pyo
+*.swp
+*.swo
+*.po
+*.egg*
+*.log
+*untracked.*
+docs/_build/*
+
+node_modules/*
+tmp/*
+dist/*
+
+.nyc_output/
+
+# actually lets check the templated index in!
+#static/index.html.templated
+

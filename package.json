@@ -1,0 +1,36 @@
+{
+  "name": "domproxy",
+  "version": "0.0.1",
+  "description": "Proxy multi-page app into DOM diffs",
+  "main": "index.js",
+  "scripts": {},
+  "bin": "bin/domproxy.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michaelpb/domproxy.git"
+  },
+  "keywords": [
+    "node",
+    "server",
+    "render",
+    "dom",
+    "proxy",
+    "virtualdom",
+    "morphdom"
+  ],
+  "author": "michaelb",
+  "license": "AGPL 3.0",
+  "engine": {
+    "node": ">=8.0.0"
+  },
+  "homepage": "https://github.com/michaelpb/node-jsc3d#readme",
+  "dependencies": {
+    "axios": "0.19.2",
+    "express": "4.17.1",
+    "jsdom": "15.2.1",
+    "socket.io": "2.3.0",
+    "vdom-serialize": "^1.0.0",
+    "vdom-serialized-patch": "^1.0.8",
+    "virtual-dom": "2.1.1"
+  }
+}
