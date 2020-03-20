@@ -23,21 +23,85 @@
   <!--
   <script src="/-scripts/virtual-dom.js"></script>
   <script src="/-scripts/vdomserialize.js"></script>
-  -->
-  <script>
-
-    function main() {
-      var socket = io();
-      socket.emit('ready', getDocumentHtml());
-      socket.on('response', (payload) => {
-        const data = JSON.parse(payload);
-        const {patch, initial} = data;
+        /*
         const vdomPatches = window.vdomserialize.deserializePatches(patch);
         console.log(vdomPatches);
         const root = window.virtualDom.create(initial);
         document.querySelector('html').innerHTML = '';
         document.querySelector('html').appendChild(root);
         window.virtualDom.patch(root, vdomPatches);
+        */
+  -->
+  <script>
+    const CREATE = 'CREATE';
+    const REMOVE = 'REMOVE';
+    const UPDATE_ATTRS = 'UPDATE_ATTRS';
+    const UPDATE_TAGNAME = 'UPDATE_TAGNAME';
+    const ATTR_CREATE = 'ATTR_CREATE';
+    const ATTR_DELETE = 'ATTR_DELETE';
+    const ATTR_UPDATE = 'ATTR_UPDATE';
+
+    function doAction(node, actionInfo) {
+      const actionName = actionInfo[0];
+
+      if (actionName === CREATE) {
+        const tagName = actionInfo[1];
+        const attrs = actionInfo[2];
+        const elem = document.createElement(tagName);
+        for (const [key, value] of attrs) {
+          elem.setAttribute(key, value);
+        }
+        node.appendChild(elem);
+
+      } else if (actionName === REMOVE) {
+        node.remove();
+
+      } else if (actionName === UPDATE_ATTRS) {
+        const attrActions = actionInfo[1];
+        for (const [action, key, value] of attrActions) {
+          if (action === ATTR_DELETE) {
+            node.removeAttribute(key);
+          } else {
+            node.setAttribute(key, value);
+          }
+        }
+
+      } else if (actionName === UPDATE_TAGNAME) {
+        // Not implemented
+        console.error('tagname swap not implemented');
+
+      } 
+    }
+
+    function getNode(breadcrumbs) {
+      let node = document.documentElement;
+      for (const crumb of breadcrumbs) {
+        const lastNode = node;
+        node = node.children[crumb];
+        if (!node) {
+          console.error('was at', lastNode, '... cannot access', crumb);
+          return null;
+        }
+      }
+      return node;
+    }
+
+    function main() {
+      var socket = io();
+      socket.emit('ready', getDocumentHtml());
+      socket.on('response', (payload) => {
+        console.log('Received response length', payload.length);
+        const data = JSON.parse(payload);
+        const {patch, initial} = data;
+        //console.log('patch', patch);
+        for (const action of patch) {
+          const breadcrumbs = action[0];
+          const node = getNode(breadcrumbs);
+          console.log(action[1][0]);
+          if (node) {
+            doAction(node, action[1]);
+          }
+        }
 
         console.log('loaded new patch');
       });
