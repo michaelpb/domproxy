@@ -19,8 +19,29 @@
       <input id="m" autocomplete="off" value="http://news.ycombinator.com/" /><button>Send</button>
     </form>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <!--
+  <script src="/-scripts/virtual-dom.js"></script>
+  <script src="/-scripts/vdomserialize.js"></script>
+  -->
   <script>
+
+    function main() {
+      var socket = io();
+      socket.emit('ready', getDocumentHtml());
+      socket.on('response', (payload) => {
+        const data = JSON.parse(payload);
+        const {patch, initial} = data;
+        const vdomPatches = window.vdomserialize.deserializePatches(patch);
+        console.log(vdomPatches);
+        const root = window.virtualDom.create(initial);
+        document.querySelector('html').innerHTML = '';
+        document.querySelector('html').appendChild(root);
+        window.virtualDom.patch(root, vdomPatches);
+
+        console.log('loaded new patch');
+      });
+    }
 
     function getDocumentHtml() {
       const node = document.doctype;
@@ -33,22 +54,7 @@
       return doctypeString + document.documentElement.outerHTML;
     }
 
-    $(function () {
-      var socket = io();
-      socket.emit('ready', getDocumentHtml());
-      $('form').submit(function(e){
-        e.preventDefault(); // prevents page reloading
-        /*
-        socket.emit('request', JSON.stringify({
-          path: $('#m').val(),
-          method: 'GET',
-          headers: {},
-        }));
-        */
-        //$('#m').val('');
-        return false;
-      });
-    });
+    main();
   </script>
 </body>
 </html>

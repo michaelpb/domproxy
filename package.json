@@ -27,7 +27,9 @@
   "dependencies": {
     "axios": "0.19.2",
     "express": "4.17.1",
+    "html-to-vdom": "^0.7.0",
     "jsdom": "15.2.1",
+    "parse5": "^5.1.1",
     "socket.io": "2.3.0",
     "vdom-serialize": "^1.0.0",
     "vdom-serialized-patch": "^1.0.8",
