@@ -1,13 +1,17 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const {makeRequest} = require('./lib/httphelper');
 const Client = require('./lib/Client');
 const httpServer = http.createServer(app);
 
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/tests/testsite.html');
+});
+
+
+app.get('/-scripts/main.js', function(req, res){
+  res.sendFile(__dirname + '/client/main.js');
 });
 
 
