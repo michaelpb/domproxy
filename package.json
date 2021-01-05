@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/michaelpb/node-jsc3d#readme",
   "dependencies": {
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "express": "4.17.1",
     "html-to-vdom": "^0.7.0",
     "jsdom": "15.2.1",
